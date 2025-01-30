@@ -13,7 +13,6 @@ export const Title = styled.h2`
   color: white;
   text-align: center;
   cursor: pointer;
-  padding: 10px 20px;
   display: inline-block;
   min-width: fit-content; // Prevents shrinking too much
 `;
@@ -21,16 +20,16 @@ export const Title = styled.h2`
 export const TitleInput = styled.input`
   font-size: 24px;
   font-weight: bold;
-  background: rgba(200, 200, 200, 0.3);
+  background: transparent;
+  padding: 20px;
   border: none;
   outline: none;
   text-align: center;
   color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
   display: inline-block;
-  min-width: 50px;  // Prevents collapsing
+  min-width: fit-content;  // Prevents collapsing
   width: auto;
+  font-family: "Poppins";
 `;
 
 
@@ -38,7 +37,6 @@ export const TimelineContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px;  
 `;
 
 export const TimelineWrapper = styled.div`
@@ -56,7 +54,6 @@ export const EventDot = styled.div`
   height: 20px;
   background-color: lightgreen;
   border-radius: 50%;
-  margin: 0 20px;
   cursor: pointer; // 🔹 Shows pointer cursor when hovered
   transition: background-color 0.2s;
 
@@ -76,25 +73,22 @@ export const EventLabel = styled.div`
   white-space: nowrap;
 `;
 
+export const Input = styled.input`
+  left: 50%;
+  font-family: "Libre Franklin";
+  border: none;
+  font-size: 14px;
+  background: transparent;
+  color: white;
+  outline: none;
+`;
+
 export const AddEventFormContainer = styled.form`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-
-export const Input = styled.input`
-  border: none;
-  font-size: 14px;
-  padding: 2px;
-  background: transparent;
-  color: white;
-  outline: none;
-  width: 100px;
-  text-align: center;
-  border-bottom: 1px solid white;
-`;
-
 
 export const Button = styled.button`
   margin-top: 10px;

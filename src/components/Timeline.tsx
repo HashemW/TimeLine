@@ -23,15 +23,15 @@ const Timeline: React.FC = () => {
     setIsEditingTitle(true);
     setTimeout(() => {
       if (titleInputRef.current) {
+        titleInputRef.current.style.width = `${titleInputRef.current.value.length * 12}px`;
         titleInputRef.current.focus();
-        titleInputRef.current.style.width = `${titleInputRef.current.scrollWidth}px`; // Initial width
       }
     }, 50);
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
-    e.target.style.width = `${e.target.scrollWidth}px`; // Dynamic resizing
+    e.target.style.width = `${e.target.value.length * 12}px`; // Dynamic resizing
   };
 
   const handleTitleBlur = () => {
@@ -50,7 +50,6 @@ const Timeline: React.FC = () => {
 
   return (
     <TimelineContainer>
-      <TitleContainer>
         {isEditingTitle ? (
           <TitleInput
             ref={titleInputRef}
@@ -62,15 +61,11 @@ const Timeline: React.FC = () => {
         ) : (
           <Title onDoubleClick={handleTitleDoubleClick}>{title}</Title>
         )}
-      </TitleContainer>
       <TimelineWrapper>
         {events.map((event, index) => (
           <TimelineEvent key={index} date={event.date} onUpdate={(newDate) => updateEvent(index, newDate)} />
         ))}
       </TimelineWrapper>
-      <div style={{display: isDropDownHidden? "none" : "block"}}>
-        <AddEventForm onAddEvent={addEvent} />
-      </div>
     </TimelineContainer>
   );
 };
