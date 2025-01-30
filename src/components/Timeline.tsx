@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { useState } from "react";
-import { TimelineContainer, TimelineWrapper } from "../styling/styles";
+import { useState, useRef, useEffect } from "react";
+import { TimelineContainer, TimelineWrapper, TitleInput, 
+  Title, TitleContainer } from "../styling/styles";
 import TimelineEvent from "./TimelineEvent";
 import AddEventForm from "./AddEventForm";
 
@@ -10,25 +11,66 @@ export interface Event {
 }
 
 const Timeline: React.FC = () => {
+  const [isDropDownHidden, setIsDropDownHidden] = useState(true);
+  const [title, setTitle] = useState("Begin Your TimeLine!");
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const titleInputRef = useRef<HTMLInputElement>(null);
   const [events, setEvents] = useState<Event[]>([
-    { date: "January 14", description: "Event 1" },
-    { date: "August", description: "Event 2" },
-    { date: "October", description: "Event 3" },
+    { date: "Event One", description: "Add your Event" },
   ]);
 
+  const handleTitleDoubleClick = () => {
+    setIsEditingTitle(true);
+    setTimeout(() => {
+      if (titleInputRef.current) {
+        titleInputRef.current.focus();
+        titleInputRef.current.style.width = `${titleInputRef.current.scrollWidth}px`; // Initial width
+      }
+    }, 50);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    e.target.style.width = `${e.target.scrollWidth}px`; // Dynamic resizing
+  };
+
+  const handleTitleBlur = () => {
+    setIsEditingTitle(false);
+    if (!title.trim()) setTitle("Your Timeline"); // Default text if empty
+  };
   const addEvent = (date: string, description: string) => {
     setEvents([...events, { date, description }]);
   };
 
+  const updateEvent = (index: number, newDate: string) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event, i) => (i === index ? { ...event, date: newDate } : event))
+    );
+  };
+
   return (
     <TimelineContainer>
-      <h2>Custom Timeline</h2>
+      <TitleContainer>
+        {isEditingTitle ? (
+          <TitleInput
+            ref={titleInputRef}
+            value={title}
+            onChange={handleTitleChange}
+            onBlur={handleTitleBlur}
+            onKeyDown={(e) => e.key === "Enter" && handleTitleBlur()}
+          />
+        ) : (
+          <Title onDoubleClick={handleTitleDoubleClick}>{title}</Title>
+        )}
+      </TitleContainer>
       <TimelineWrapper>
         {events.map((event, index) => (
-          <TimelineEvent key={index} date={event.date} />
+          <TimelineEvent key={index} date={event.date} onUpdate={(newDate) => updateEvent(index, newDate)} />
         ))}
       </TimelineWrapper>
-      <AddEventForm onAddEvent={addEvent} />
+      <div style={{display: isDropDownHidden? "none" : "block"}}>
+        <AddEventForm onAddEvent={addEvent} />
+      </div>
     </TimelineContainer>
   );
 };
