@@ -49,7 +49,6 @@ export const TimelineWrapper = styled.div`
 `;
 
 export const EventDot = styled.div`
-  position: relative;
   width: 20px;
   height: 20px;
   background-color: lightgreen;
@@ -62,6 +61,10 @@ export const EventDot = styled.div`
   }
 `;
 
+export const LineContent = styled.div`
+  position: relative;
+  display: flex;
+`;
 export const EventLabel = styled.div`
   position: absolute;
   bottom: 30px; // 🔹 Moves the text above the dot
@@ -74,7 +77,11 @@ export const EventLabel = styled.div`
 `;
 
 export const Input = styled.input`
+  position: absolute;
+  bottom: 29px;
   left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
   font-family: "Libre Franklin";
   border: none;
   font-size: 14px;
@@ -99,3 +106,9 @@ export const Button = styled.button`
   cursor: pointer;
 `;
 
+export const Line = styled.hr`
+  width:20px;
+  height: 2px;
+  background-color: white;
+  
+`;

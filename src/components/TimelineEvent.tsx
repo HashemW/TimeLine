@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState, useRef} from "react";
-import { EventDot, EventLabel, Input } from "../styling/styles";
+import { EventDot, EventLabel, Input, Line, LineContent } from "../styling/styles";
 
 interface Props {
   date: string;
@@ -30,19 +30,25 @@ const TimelineEvent: React.FC<Props> = ({ date, onUpdate }) => {
   };
 
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-      <EventDot />
-      {isEditing ? (
-        <Input
-          ref={inputRef}
-          value={tempDate}
-          onChange={(e) => setTempDate(e.target.value)}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-        />
-      ) : (
-        <EventLabel onDoubleClick={handleDoubleClick}>{date}</EventLabel>
-      )}
+    <div>
+      <LineContent>
+        <EventDot />
+        {isEditing ? (
+          <Input
+            ref={inputRef}
+            value={tempDate}
+            onChange={(e) => setTempDate(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+          />
+          
+        ) : (
+          <EventLabel onDoubleClick={handleDoubleClick}>{date}</EventLabel>
+          
+        )}
+        <Line/>
+        
+      </LineContent>
     </div>
   );
 };

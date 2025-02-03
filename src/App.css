@@ -19,6 +19,7 @@ h1, h2, h3, h4 {
 
 .testArea {
   padding-bottom: 20px;
+  right:50%
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
