@@ -48,7 +48,7 @@ export const TimelineWrapper = styled.div`
   padding: 30px;
 `;
 
-export const EventDot = styled.div`
+export const EventDotGreen = styled.div`
   width: 20px;
   height: 20px;
   background-color: lightgreen;
@@ -58,6 +58,19 @@ export const EventDot = styled.div`
 
   &:hover {
     background-color: green; // 🔹 Slight hover effect
+  }
+`;
+
+export const EventDotBlue = styled.button`
+  width: 20px;
+  height: 20px;
+  background-color: lightBlue;
+  border-radius: 50%;
+  cursor: pointer; // 🔹 Shows pointer cursor when hovered
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: steelblue; // 🔹 Slight hover effect
   }
 `;
 
@@ -107,7 +120,7 @@ export const Button = styled.button`
 `;
 
 export const Line = styled.hr`
-  width:20px;
+  width:60px;
   height: 2px;
   background-color: white;
   

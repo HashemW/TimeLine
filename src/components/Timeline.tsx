@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useRef, useEffect } from "react";
 import { TimelineContainer, TimelineWrapper, TitleInput, 
-  Title, TitleContainer } from "../styling/styles";
+  Title, TitleContainer, EventDotBlue } from "../styling/styles";
 import TimelineEvent from "./TimelineEvent";
 import AddEventForm from "./AddEventForm";
 
@@ -65,6 +65,7 @@ const Timeline: React.FC = () => {
         {events.map((event, index) => (
           <TimelineEvent key={index} date={event.date} onUpdate={(newDate) => updateEvent(index, newDate)} />
         ))}
+        <EventDotBlue onClick={(e) => addEvent("Next event", "description")}/>
       </TimelineWrapper>
     </TimelineContainer>
   );
