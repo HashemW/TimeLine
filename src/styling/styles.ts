@@ -41,11 +41,32 @@ export const TimelineContainer = styled.div`
 
 export const TimelineWrapper = styled.div`
   display: flex;
+  align-items: center;
   overflow-x: auto;
   white-space: nowrap;
   width: 100%;
   max-width: 800px;
-  padding: 30px;
+  padding: 500px;
+  padding-top: 131px;
+  padding-left: -5px;
+  &::-webkit-scrollbar {
+    height: 8px; /* Slimmer scrollbar */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); /* Subtle track */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3); /* Soft white */
+    border-radius: 10px;
+    transition: background 0.3s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6); /* More visible on hover */
+  }
 `;
 
 export const EventDotGreen = styled.div`
@@ -62,15 +83,20 @@ export const EventDotGreen = styled.div`
 `;
 
 export const EventDotBlue = styled.button`
-  width: 20px;
-  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  margin-left: -30px;
   background-color: lightBlue;
   border-radius: 50%;
-  cursor: pointer; // 🔹 Shows pointer cursor when hovered
+  cursor: pointer;
   transition: background-color 0.2s;
+  flex-shrink: 0; /* Prevents squishing */
 
   &:hover {
-    background-color: steelblue; // 🔹 Slight hover effect
+    background-color: steelblue;
   }
 `;
 
@@ -120,7 +146,7 @@ export const Button = styled.button`
 `;
 
 export const Line = styled.hr`
-  width:60px;
+  width:180px;
   height: 2px;
   background-color: white;
   
