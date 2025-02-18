@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useRef, useEffect } from "react";
 import { TimelineContainer, TimelineWrapper, TitleInput, 
-  Title, TitleContainer, EventDotBlue} from "../styling/styles";
+  Title, TitleContainer, EventDotBlue, AddEventCircle} from "../styling/styles";
 import TimelineEvent from "./TimelineEvent";
 import AddEventForm from "./AddEventForm";
 
@@ -10,14 +10,17 @@ export interface Event {
   description: string;
 }
 
+
 const Timeline: React.FC = () => {
   const [isDropDownHidden, setIsDropDownHidden] = useState(true);
   const [title, setTitle] = useState("Begin Your TimeLine!");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
+  const [timelines, setTimelines] = useState([]);
   const [events, setEvents] = useState<Event[]>([
     { date: "Event One", description: "Add your Event" },
   ]);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   const handleTitleDoubleClick = () => {
     setIsEditingTitle(true);
@@ -38,8 +41,20 @@ const Timeline: React.FC = () => {
     setIsEditingTitle(false);
     if (!title.trim()) setTitle("Your Timeline"); // Default text if empty
   };
-  const addEvent = (date: string, description: string) => {
-    setEvents([...events, { date, description }]);
+  const addEvent = (date: string, description: string, index?: number) => {
+    if (index !== undefined) {
+      setEvents([
+        ...events.slice(0, index + 1),
+        { date, description },
+        ...events.slice(index + 1),
+      ]);
+    } else {
+      setEvents([...events, { date, description }]);
+    }
+  };
+
+  const deleteEvent = (index: number) => {
+    setEvents(events.filter((_, i) => i !== index));
   };
 
   const updateEvent = (index: number, newDate: string) => {
@@ -63,11 +78,30 @@ const Timeline: React.FC = () => {
         )}
       <TimelineWrapper>
         {events.map((event, index) => (
-          <TimelineEvent key={index} date={event.date} onUpdate={(newDate) => updateEvent(index, newDate)} />
+          <React.Fragment key={index}>
+            {index > 0 && (
+              <AddEventCircle
+                onMouseEnter={() => setHoverIndex(index - 1)}
+                onMouseLeave={() => setHoverIndex(null)}
+                onClick={() => addEvent("New Event", "description", index - 1)}
+                visible={hoverIndex === index - 1}
+              />
+            )}
+            <TimelineEvent
+              date={event.date}
+              index={index}
+              onUpdate={(newDate) =>
+                setEvents((prevEvents) =>
+                  prevEvents.map((ev, i) =>
+                    i === index ? { ...ev, date: newDate } : ev
+                  )
+                )
+              }
+              onDelete={deleteEvent}
+            />
+          </React.Fragment>
         ))}
-        <div style={{ marginLeft: "30px" }}>
-          <EventDotBlue onClick={() => addEvent("Next event", "description")} />
-        </div>
+        <EventDotBlue onClick={() => addEvent("Next event", "description")} />
       </TimelineWrapper>
     </TimelineContainer>
   );

@@ -102,7 +102,7 @@ export const EventDotBlue = styled.button`
   align-items: center;
   width: 22px;
   height: 22px;
-  margin-left: -30px;
+  margin-left: 0px;
   background-color: lightBlue;
   border-radius: 50%;
   cursor: pointer;
@@ -120,7 +120,7 @@ export const LineContent = styled.div`
 `;
 export const EventLabel = styled.div`
   position: absolute;
-  bottom: 30px; // 🔹 Moves the text above the dot
+  bottom: 40px; // 🔹 Moves the text above the dot
   left: 50%;
   transform: translateX(-50%); // 🔹 Centers it horizontally
   text-align: center;
@@ -159,9 +159,49 @@ export const Button = styled.button`
   cursor: pointer;
 `;
 
-export const Line = styled.hr`
+export const Line = styled.button`
   width:180px;
+  margin-top: 8px;
   height: 2px;
   background-color: white;
+  cursor: pointer;
+
   
+`;
+
+export const DeleteButton = styled.button`
+  position: absolute;
+  top: -15px; /* Moves above the dot */
+  left: 50%;
+  transform: translateX(-50%);
+  background: none;
+  color: red;
+  border: none;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: darkred;
+  }
+`;
+
+export const AddEventCircle = styled.div<{ visible: boolean }>`
+  width: 15px;
+  height: 15px;
+  background-color: rgba(255, 255, 255, 0.3); /* Light shadow */
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.2s, transform 0.2s;
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  pointer-events: ${({ visible }) => (visible ? "auto" : "none")};
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-50%) scale(1.2);
+  }
 `;

@@ -1,10 +1,13 @@
 import * as React from 'react';
 import {useState, useRef} from "react";
-import { EventDotGreen, EventLabel, Input, Line, LineContent, EventDotBlue } from "../styling/styles";
+import { EventDotGreen, EventLabel, Input, Line, LineContent, 
+  EventDotBlue, DeleteButton  } from "../styling/styles";
 
 interface Props {
   date: string;
+  index: number;
   onUpdate: (newDate: string) => void;
+  onDelete: (index: number) => void;
 }
 
 export interface Event {
@@ -12,7 +15,7 @@ export interface Event {
   description: string;
 }
 
-const TimelineEvent: React.FC<Props> = ({ date, onUpdate }) => {
+const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempDate, setTempDate] = useState(date);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,6 +46,7 @@ const TimelineEvent: React.FC<Props> = ({ date, onUpdate }) => {
   return (
     <LineContent>
       <LineContent>
+        <DeleteButton onClick={() => onDelete(index)}>X</DeleteButton>
         <EventDotGreen />
         {isEditing ? (
           <Input
