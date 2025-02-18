@@ -70,15 +70,29 @@ export const TimelineWrapper = styled.div`
 `;
 
 export const EventDotGreen = styled.div`
+  position: relative;
   width: 20px;
   height: 20px;
   background-color: lightgreen;
   border-radius: 50%;
-  cursor: pointer; // 🔹 Shows pointer cursor when hovered
-  transition: background-color 0.2s;
 
-  &:hover {
-    background-color: green; // 🔹 Slight hover effect
+  &::after {
+    content: "";
+    cursor: pointer;
+    position: absolute;
+    top: 40%; /* Places it right below the dot */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid white; /* Default arrow color */
+    transition: border-top-color 0.2s;
+  }
+
+  &:hover::after {
+    border-top-color: green; /* Change arrow color on hover */
   }
 `;
 
