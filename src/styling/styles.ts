@@ -161,12 +161,40 @@ export const Button = styled.button`
 
 export const Line = styled.button`
   width:180px;
-  margin-top: 8px;
+  margin-top: 3px;
   height: 2px;
   background-color: white;
   cursor: pointer;
 
-  
+  &:hover {
+    background-color:gray;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    transform: translateX(-50%) scale(0.5);
+    margin-top: -8px;
+    width: 16px;
+    height: 16px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+`;
+
+export const LastLine = styled.button`
+  width:180px;
+  margin-top: 3px;
+  height: 2px;
+  background-color: white;
 `;
 
 export const DeleteButton = styled.button`
@@ -205,3 +233,27 @@ export const AddEventCircle = styled.div<{ visible: boolean }>`
     transform: translateY(-50%) scale(1.2);
   }
 `;
+
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+`;
+
+export const NestedTimelineContainer = styled.div`
+  position: absolute;
+  display: flex;
+  top: 100%; /* Ensures it appears below the event dot */
+  left: 50%;
+  z-index: 11;
+  background: rgba(20, 20, 20, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+  min-width: 400px;
+  white-space: nowrap;
+`;
+

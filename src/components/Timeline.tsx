@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useRef, useEffect } from "react";
 import { TimelineContainer, TimelineWrapper, TitleInput, 
-  Title, TitleContainer, EventDotBlue, AddEventCircle} from "../styling/styles";
+  Title, TitleContainer, EventDotBlue, AddEventCircle, Line, LastLine} from "../styling/styles";
 import TimelineEvent from "./TimelineEvent";
 import AddEventForm from "./AddEventForm";
 
@@ -16,7 +16,7 @@ const Timeline: React.FC = () => {
   const [title, setTitle] = useState("Begin Your TimeLine!");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const [timelines, setTimelines] = useState([]);
+  const timeLineHidden = useState(false);
   const [events, setEvents] = useState<Event[]>([
     { date: "Event One", description: "Add your Event" },
   ]);
@@ -80,11 +80,11 @@ const Timeline: React.FC = () => {
         {events.map((event, index) => (
           <React.Fragment key={index}>
             {index > 0 && (
-              <AddEventCircle
+              <Line
                 onMouseEnter={() => setHoverIndex(index - 1)}
                 onMouseLeave={() => setHoverIndex(null)}
                 onClick={() => addEvent("New Event", "description", index - 1)}
-                visible={hoverIndex === index - 1}
+                
               />
             )}
             <TimelineEvent
@@ -99,10 +99,15 @@ const Timeline: React.FC = () => {
               }
               onDelete={deleteEvent}
             />
+            
           </React.Fragment>
+          
         ))}
+        <LastLine/>
         <EventDotBlue onClick={() => addEvent("Next event", "description")} />
+          
       </TimelineWrapper>
+      
     </TimelineContainer>
   );
 };
