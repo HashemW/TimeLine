@@ -112,7 +112,13 @@ const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => 
       <DeleteButton onClick={() => onDelete(index)}>X</DeleteButton>
       <EventDotGreen 
         ref={eventDotRef}
-        onClick={openNestedTimeline}
+        onClick={() => {
+          if (isNestedTimelineActive) {
+            closeNestedTimeline();
+          } else {
+            openNestedTimeline();
+          }
+        }}
       />
     </LineContent>
     {isNestedTimelineActive && (
