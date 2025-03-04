@@ -1,14 +1,15 @@
 import * as React from 'react';
 import {useState, useRef} from "react";
 import { EventDotGreen, EventLabel, Input, LineContent, 
-  DeleteButton, Overlay, NestedTimelineContainer,
-  TimelineWrapper, Line, EventDotBlue,LastLine  } from "../styling/styles";
+  DeleteButton, Overlay, NestedTimelineContainer, TextArea,
+  TimelineWrapper, Line, EventDotBlue,LastLine, Description, InputDesc  } from "../styling/styles";
 import Timeline from './Timeline';
 
 interface Props {
   date: string;
+  description: string;
   index: number;
-  onUpdate: (newDate: string) => void;
+  onUpdate: (newDate: string, newDescription: string) => void;
   onDelete: (index: number) => void;
 }
 
@@ -17,10 +18,12 @@ export interface Event {
   description: string;
 }
 
-const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => {
+const TimelineEvent: React.FC<Props> = ({ date, description, index, onUpdate, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempDate, setTempDate] = useState(date);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isEditingDesc, setIsEditingDesc] = useState(false);
+  const [tempDescription, setTempDescription] = useState(description);
   const [events, setEvents] = useState<Event[]>([
     { date: "Event One", description: "Add your Event" },
   ]);
@@ -31,19 +34,54 @@ const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => 
   const [isNestedTimelineActive, setIsNestedTimelineActive] = useState(false);
   const eventDotRef = useRef<HTMLDivElement>(null);
   const [nestedPosition, setNestedPosition] = useState({ top: 0, left: 0 });
-
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const descAreaRef = useRef<HTMLDivElement>(null);
   const deleteEvent = (index: number) => {
     setEvents(events.filter((_, i) => i !== index));
   };
   // Enable editing mode
   const handleDoubleClick = () => {
     setIsEditing(true);
-    setTimeout(() => inputRef.current?.focus(), 50); // Auto-focus input
+    setTimeout(() => {
+      if (textAreaRef.current) {
+        textAreaRef.current.style.height = "auto"; // Reset height
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`; // Adjust to content
+        textAreaRef.current.focus();
+      }
+    }, 50);
   };
+  const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTempDescription(e.target.value);
+    e.target.style.height = "auto"; // Reset height to avoid issues
+    e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height dynamically
+  };
+  const handleDescDoubleClick = () => {
+    setIsEditingDesc(true);
+    setTimeout(() => {
+      if (textAreaRef.current) {
+        textAreaRef.current.style.height = "auto"; // Reset height
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`; // Adjust height
+        textAreaRef.current.focus(); // Auto-focus into text area
+
+        const length = textAreaRef.current.value.length;
+        textAreaRef.current.setSelectionRange(length, length);
+      }
+    }, 50);
+  };
+
+  const handleDescBlur = () => {
+    setIsEditingDesc(false);
+    if (tempDescription.trim()) onUpdate(tempDate, tempDescription);
+  };
+
+  const handleDescKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleDescBlur();
+  };
+
   // Save changes and exit edit mode
   const handleBlur = () => {
     setIsEditing(false);
-    if (tempDate.trim()) onUpdate(tempDate); // Update only if not empty
+    if (tempDate.trim() || tempDescription.trim()) onUpdate(tempDate, tempDescription);
   };
 
   const addEvent = (date: string, description: string, index?: number) => {
@@ -77,13 +115,11 @@ const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => 
     if (e.key === "Enter") handleBlur();
   };
   const openNestedTimeline = () => {
-    
-    
-    if (eventDotRef.current) {
+    if (eventDotRef.current && descAreaRef.current) {
       const parent = eventDotRef.current.parentElement;
-      console.log("KYS!");
+      const descriptionHeight = descAreaRef.current.scrollHeight || 30;
       if (parent) {
-        setNestedPosition({ top: parent.offsetTop + 50, left: parent.offsetLeft });
+        setNestedPosition({ top: parent.offsetTop + + descriptionHeight + 50, left: parent.offsetLeft });
       }
     }
     setIsNestedTimelineActive(true);
@@ -120,6 +156,20 @@ const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => 
           }
         }}
       />
+      {isEditingDesc ? (
+        <TextArea
+          ref={textAreaRef}
+          value={tempDescription}
+          onChange={handleDescChange}
+          onBlur={handleDescBlur}
+          autoFocus 
+        />
+      ) : (
+        <Description 
+        ref={descAreaRef}
+        onDoubleClick={handleDescDoubleClick}>{description}
+        </Description>
+      )}
     </LineContent>
     {isNestedTimelineActive && (
       <NestedTimelineContainer style={{ position: "absolute", top: nestedPosition.top, left: nestedPosition.left }}>
@@ -135,11 +185,12 @@ const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => 
             )}
             <TimelineEvent
               date={event.date}
+              description={event.description}
               index={index}
-              onUpdate={(newDate) =>
+              onUpdate={(newDate, newDescription) =>
                 setNestedEvents((prevEvents) =>
                   prevEvents.map((ev, i) =>
-                    i === index ? { ...ev, date: newDate } : ev
+                    i === index ? { ...ev, date: newDate, description: newDescription } : ev
                   )
                 )
               }
@@ -147,7 +198,7 @@ const TimelineEvent: React.FC<Props> = ({ date, index, onUpdate, onDelete }) => 
             />
           </React.Fragment>
         ))}
-        <LastLine/>
+        { nestedEvents.length && <LastLine/>}
         <EventDotBlue onClick={() => addToNestedEvents("Next event", "description")} />
           
       </NestedTimelineContainer>

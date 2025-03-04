@@ -4,6 +4,7 @@ import { TimelineContainer, TimelineWrapper, TitleInput,
   Title, TitleContainer, EventDotBlue, AddEventCircle, Line, LastLine} from "../styling/styles";
 import TimelineEvent from "./TimelineEvent";
 import AddEventForm from "./AddEventForm";
+import { useFormState } from 'react-dom';
 
 export interface Event {
   date: string;
@@ -12,11 +13,10 @@ export interface Event {
 
 
 const Timeline: React.FC = () => {
-  const [isDropDownHidden, setIsDropDownHidden] = useState(true);
   const [title, setTitle] = useState("Begin Your TimeLine!");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const timeLineHidden = useState(false);
+  const [emptyTimeline, setIsEmptyTimeline] = useState(true);
   const [events, setEvents] = useState<Event[]>([
     { date: "Event One", description: "Add your Event" },
   ]);
@@ -51,11 +51,22 @@ const Timeline: React.FC = () => {
     } else {
       setEvents([...events, { date, description }]);
     }
+    checkEvents();
   };
 
   const deleteEvent = (index: number) => {
     setEvents(events.filter((_, i) => i !== index));
+    checkEvents();
   };
+
+  const checkEvents = () => {
+    console.log(events.length);
+    if (events.length > 0) {
+      setIsEmptyTimeline(false);
+    } else {
+      setIsEmptyTimeline(true);
+    }
+   };
 
   const updateEvent = (index: number, newDate: string) => {
     setEvents((prevEvents) =>
@@ -89,11 +100,12 @@ const Timeline: React.FC = () => {
             )}
             <TimelineEvent
               date={event.date}
+              description={event.description}
               index={index}
-              onUpdate={(newDate) =>
+              onUpdate={(newDate, newDescription) =>
                 setEvents((prevEvents) =>
                   prevEvents.map((ev, i) =>
-                    i === index ? { ...ev, date: newDate } : ev
+                    i === index ? { ...ev, date: newDate, description: newDescription } : ev
                   )
                 )
               }
@@ -103,7 +115,8 @@ const Timeline: React.FC = () => {
           </React.Fragment>
           
         ))}
-        <LastLine/>
+        { events.length && <LastLine/>}
+        
         <EventDotBlue onClick={() => addEvent("Next event", "description")} />
           
       </TimelineWrapper>

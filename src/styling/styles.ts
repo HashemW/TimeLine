@@ -131,7 +131,7 @@ export const EventLabel = styled.div`
 
 export const Input = styled.input`
   position: absolute;
-  bottom: 29px;
+  bottom: 39px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -255,5 +255,77 @@ export const NestedTimelineContainer = styled.div`
   box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
   min-width: 400px;
   white-space: nowrap;
+`;
+
+export const Description = styled.div`
+  position: absolute;
+  top: 30px; /* Places the description below the dot */
+  left: 50%;
+  transform: translateX(-50%);
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  border: 5px black;
+  display:flex;
+  color: white;
+  font-size: 14px;
+  white-space: pre-wrap; /* Allows multi-line formatting */
+  cursor: pointer;
+  width: 200px;
+  max-width: 200px;
+`;
+
+export const TextArea = styled.textarea`
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: "Libre Franklin";
+  border: 5px black;
+  font-size: 14px;
+  background: transparent;
+  color: white;
+  outline: black 5px;
+  width: 200px; /* Set a max width */
+  min-height: 20px;
+  max-height: 100px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    height: 8px; /* Slimmer scrollbar */
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); /* Subtle track */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3); /* Soft white */
+    border-radius: 10px;
+    transition: background 0.3s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6); /* More visible on hover */
+  }
+`;
+
+export const InputDesc = styled.input`
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: "Libre Franklin";
+  border: none;
+  font-size: 14px;
+  background: transparent;
+  color: white;
+  outline: none;
+  
+  word-wrap: break-word;
 `;
 
