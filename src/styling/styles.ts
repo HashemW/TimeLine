@@ -160,7 +160,7 @@ export const Button = styled.button`
 `;
 
 export const Line = styled.button`
-  width:180px;
+  min-width:180px;
   margin-top: 3px;
   height: 2px;
   background-color: white;
@@ -190,8 +190,9 @@ export const Line = styled.button`
   }
 `;
 
+
 export const LastLine = styled.button`
-  width:180px;
+  min-width:180px;
   margin-top: 3px;
   height: 2px;
   background-color: white;
@@ -234,14 +235,18 @@ export const AddEventCircle = styled.div<{ visible: boolean }>`
   }
 `;
 
-export const Overlay = styled.div`
+export const Overlay = styled.div<{ isActive: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 10;
+  backdrop-filter: ${({ isActive }) => (isActive ? "blur(8px)" : "none")}; /* Blurs background */
+  background-color: ${({ isActive }) => (isActive ? "rgba(0, 0, 0, 0.5)" : "transparent")}; /* Dimmed effect */
+  z-index: ${({ isActive }) => (isActive ? 10 : -1)};
+  pointer-events: ${({ isActive }) => (isActive ? "auto" : "none")}; /* Prevent clicks on blurred elements */
 `;
+
 
 export const NestedTimelineContainer = styled.div`
   position: absolute;
@@ -249,7 +254,6 @@ export const NestedTimelineContainer = styled.div`
   top: 100%; /* Ensures it appears below the event dot */
   left: 50%;
   z-index: 11;
-  background: rgba(20, 20, 20, 0.95);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);

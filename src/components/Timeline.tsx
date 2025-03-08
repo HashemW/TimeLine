@@ -16,12 +16,10 @@ const Timeline: React.FC = () => {
   const [title, setTitle] = useState("Begin Your TimeLine!");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const [emptyTimeline, setIsEmptyTimeline] = useState(true);
   const [events, setEvents] = useState<Event[]>([
     { date: "Event One", description: "Add your Event" },
   ]);
-  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-
+  
   const handleTitleDoubleClick = () => {
     setIsEditingTitle(true);
     setTimeout(() => {
@@ -51,27 +49,10 @@ const Timeline: React.FC = () => {
     } else {
       setEvents([...events, { date, description }]);
     }
-    checkEvents();
   };
 
   const deleteEvent = (index: number) => {
     setEvents(events.filter((_, i) => i !== index));
-    checkEvents();
-  };
-
-  const checkEvents = () => {
-    console.log(events.length);
-    if (events.length > 0) {
-      setIsEmptyTimeline(false);
-    } else {
-      setIsEmptyTimeline(true);
-    }
-   };
-
-  const updateEvent = (index: number, newDate: string) => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event, i) => (i === index ? { ...event, date: newDate } : event))
-    );
   };
 
   return (
@@ -87,15 +68,13 @@ const Timeline: React.FC = () => {
         ) : (
           <Title onDoubleClick={handleTitleDoubleClick}>{title}</Title>
         )}
+        
       <TimelineWrapper>
         {events.map((event, index) => (
           <React.Fragment key={index}>
             {index > 0 && (
               <Line
-                onMouseEnter={() => setHoverIndex(index - 1)}
-                onMouseLeave={() => setHoverIndex(null)}
-                onClick={() => addEvent("New Event", "description", index - 1)}
-                
+                onClick={() => addEvent("New Event", "description", index - 1)}  
               />
             )}
             <TimelineEvent
